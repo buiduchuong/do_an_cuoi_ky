@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity {
-    public static List<Book> books = new ArrayList<>();
+
     EditText editText_user;
     TextView textView_forgotPass;
     TextInputEditText editText_pass;
@@ -43,29 +43,7 @@ public class LoginActivity extends Activity {
         anhxa();
         setSaveAccount();
     }
-    private void readJason(String url) {
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    books.clear();
-                    for (int i = 0; i < response.length(); i++) {
-                        try {
-                            JSONObject jsonObject = (JSONObject) response.get(i);
-                            books.add(new Book(jsonObject.getInt("maSach"), jsonObject.getString("tenSach"),
-                                    jsonObject.getString("hinhAnhSach"), jsonObject.getString("moTa"),
-                                    jsonObject.getDouble("donGia")));
-                            System.out.println(books.size() + "trong");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
-        requestQueue.add(jsonArrayRequest);
-
-
-    }
 
 
     private void anhxa() {
@@ -78,7 +56,7 @@ public class LoginActivity extends Activity {
 
 
     private void login() {
-        readJason("http://cruss.atwebpages.com/getBook.php");
+
         ConnectWithFirebase.getInstance(LoginActivity.this).signInwithEmail(editText_user.getText().toString().trim(),
                 editText_pass.getText().toString().trim());
 
@@ -112,7 +90,6 @@ public class LoginActivity extends Activity {
         editText_user.setText(sharedPreferences.getString("user", ""));
         editText_pass.setText(sharedPreferences.getString("pass", ""));
         checkBox_saveAcc.setChecked(sharedPreferences.getBoolean("checkbox", false));
-
     }
 
     private void saveAccount() {
@@ -127,5 +104,6 @@ public class LoginActivity extends Activity {
         }
         editor.commit();
     }
+
 
 }

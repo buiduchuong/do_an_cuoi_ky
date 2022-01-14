@@ -26,7 +26,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mBooks = new MutableLiveData<>();
-        mBooks.setValue(LoginActivity.books);
+        mBooks.setValue(MainActivity.books1);
     }
 
 

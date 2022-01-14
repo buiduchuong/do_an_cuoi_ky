@@ -16,8 +16,8 @@
 
             <ImageView
                 android:id="@+id/imageView_haBook_cart"
-                android:layout_width="100dp"
-                android:layout_height="138dp"
+                android:layout_width="94dp"
+                android:layout_height="119dp"
                 android:layout_margin="2dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
@@ -37,13 +37,13 @@
                     android:layout_height="wrap_content"
                     android:text="ten sp"
                     android:textColor="#152995"
-                    android:textSize="20dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/textView_donGia_book_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="13dp"
                     android:text="gia"
                     android:textColor="#D61616"
                     android:textSize="20dp" />

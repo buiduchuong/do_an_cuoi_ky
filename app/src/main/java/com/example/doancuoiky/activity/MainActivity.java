@@ -2,6 +2,7 @@ package com.example.doancuoiky.activity;
 
 import android.Manifest;
 import android.app.PictureInPictureParams;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,11 +10,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
     private static final int CODE_IMAGE = 111;
+    public static List<Book> books1 = new ArrayList<>();
     private List<Account> accounts = new ArrayList<>();
     public static List<Book> books = new ArrayList<>();
     private TextView textView_user, textView_fullName;
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         accounts.clear();
-
+        readJason("http://cruss.atwebpages.com/getBook.php");
         MySQL.getData("http://cruss.atwebpages.com/getData.php", MainActivity.this, accounts, MySQL.EMAIL, MySQL.FULLNAME, MySQL.ADDRESS, MySQL.PHONENUMBER);
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
@@ -87,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main).navigate(R.id.nav_home);
     }
 
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         if (accounts.size() > 0) {
             for (Account a : accounts
             ) {
-                if (a.getEmail().equals(getEmail())) {
+                if (a.getEmail().toLowerCase().equals(getEmail().toLowerCase())) {
                     account = a;
                     if (textView_user != null && textView_fullName != null) {
                         textView_user.setText(a.getEmail());
@@ -250,5 +256,27 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
+    private void readJason(String url) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    books1.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject jsonObject = (JSONObject) response.get(i);
+                            books1.add(new Book(jsonObject.getInt("maSach"), jsonObject.getString("tenSach"),
+                                    jsonObject.getString("hinhAnhSach"), jsonObject.getString("moTa"),
+                                    jsonObject.getDouble("donGia")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                error -> Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show());
+        requestQueue.add(jsonArrayRequest);
+
+
+    }
 
 }

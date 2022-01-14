@@ -77,7 +77,7 @@ public class BookCartAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) v.getTag();
         }
         Book book = books.get(i);
-        viewHolder.textView_ten.setText(book.getTenSach().toUpperCase());
+        viewHolder.textView_ten.setText(book.getTenSach().trim());
         decimalFormat = new DecimalFormat("###,###,###");
         viewHolder.textView_gia.setText("Giá : " + decimalFormat.format(book.getDonGia() * book.getSoLuong()) + " Đ");
         Picasso.get().load(book.getHinhAnhSach()).into(viewHolder.imageView_ha);
